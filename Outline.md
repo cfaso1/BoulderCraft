@@ -69,6 +69,7 @@
     - Can be marked as start/top
 
 ## Hold Database
+- Done through Unity assests and prefabs
 - Holds are stored as 3D objects
 - Each hold has:
     - Unique hold ID
@@ -76,10 +77,8 @@
     - Type (crimp, jug, slopper)
     - Size measurement
     - The 3D object file
-- Around 1000 holds in database
-- Must have quick access
-- Minimal write requirements
-- JSON or SQLite ?
+- Around 1000 holds stored
+- Saves stored as JSON
 
 ## Hold Scanning
 - 3D scanned using photos
@@ -88,7 +87,24 @@
 - Shape/size over detail
 
 ## Saving and Sharing
+- Player can save their current route
+    - Will save the position and rotation of all holds set
+    - Saves are given a name
+- Player choses from different saved projects
+- Player can import routes from previous saves or other player's save
+- Importing will overwrite any collisions on current project
+    - Notify player of any overwritten holds on import
+    - Player imports by dragging a save file into the saves folder
+    - Open saves folder button for ease of access
 
 ## Application sharing
+- Application available on Windows/Mac/Linux
+- Application is stored in one folder
+- User can add a shortcut to their desktop
+- Open source on github for free download
 
 ## Tech stack
+- Unity for gameplay and physics (C#)
+- Blender for creating and refining 3D models
+- (?) for scanning holds into 3D models
+- GitHub for version control and sharing
