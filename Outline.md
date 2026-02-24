@@ -24,10 +24,8 @@
     - Slow-Medium speed flight to ensure precision
     - Mouse -> Move camera direction
     - WASD -> Move player in direction
-    - Shift -> Player up, CTRL -> Player down
-    - Space -> Toggle camera lock and mouse cursor
-    - Sroll wheel -> Zoom in and out
-    - ALT -> reset camera zoom
+    - Space -> Player up
+    - Shift -> Player down
 - Placing holds
     - Dragged from side menu onto the wall in front of player
     - Can drag existing holds to edit position
@@ -106,5 +104,5 @@
 ## Tech stack
 - Unity for gameplay and physics (C#)
 - Blender for creating and refining 3D models
-- (?) for scanning holds into 3D models
+- RealityScan for scanning holds into 3D models
 - GitHub for version control and sharing

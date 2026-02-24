@@ -35,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         MovePlayer();
+        if (Input.GetKey(upKey)) FlyUp();
+        if (Input.GetKey(downKey)) FlyDown();
     }
 
     private void MyInput()
@@ -48,14 +50,6 @@ public class PlayerMovement : MonoBehaviour
         // Calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
         rb.AddForce(moveDirection * moveSpeed * 10f, ForceMode.Force);
-        if (Input.GetKey(upKey))
-        {
-            rb.AddForce(transform.up * flightForce, ForceMode.Force);
-        }
-        if (Input.GetKey(downKey))
-        {
-            rb.AddForce(transform.up * flightForce * -1, ForceMode.Force);
-        }
     }
 
     private void SpeedControl()
@@ -68,5 +62,15 @@ public class PlayerMovement : MonoBehaviour
             Vector3 limitedVel = flatVel.normalized * moveSpeed;
             rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
         }
+    }
+
+    private void FlyUp()
+    {
+        rb.AddForce(transform.up * flightForce, ForceMode.Force);
+    }
+
+    private void FlyDown()
+    {
+        rb.AddForce(transform.up * flightForce * -1, ForceMode.Force);
     }
 }
