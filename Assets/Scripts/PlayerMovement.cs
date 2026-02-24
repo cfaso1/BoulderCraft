@@ -9,7 +9,6 @@ public class PlayerMovement : MonoBehaviour
     public float flightForce;
     public KeyCode upKey = KeyCode.Space;
     public KeyCode downKey = KeyCode.LeftShift;
-    bool upwards;
 
     public Transform orientation;
 
@@ -42,16 +41,6 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
-        if (Input.GetKey(upKey))
-        {
-            upwards = true;
-            Fly();
-        }
-        if (Input.GetKey(downKey))
-        {
-            upwards = false;
-            Fly();
-        }
     }
 
     private void MovePlayer()
@@ -59,6 +48,14 @@ public class PlayerMovement : MonoBehaviour
         // Calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
         rb.AddForce(moveDirection * moveSpeed * 10f, ForceMode.Force);
+        if (Input.GetKey(upKey))
+        {
+            rb.AddForce(transform.up * flightForce, ForceMode.Force);
+        }
+        if (Input.GetKey(downKey))
+        {
+            rb.AddForce(transform.up * flightForce * -1, ForceMode.Force);
+        }
     }
 
     private void SpeedControl()
@@ -71,14 +68,5 @@ public class PlayerMovement : MonoBehaviour
             Vector3 limitedVel = flatVel.normalized * moveSpeed;
             rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
         }
-    }
-
-    private void Fly()
-    {
-        if (upwards)
-            rb.AddForce(transform.up * flightForce, ForceMode.Force);
-        else
-            rb.AddForce(transform.up * flightForce * -1, ForceMode.Force);
-
     }
 }
