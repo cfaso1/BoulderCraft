@@ -106,3 +106,11 @@
 - Blender for creating and refining 3D models
 - RealityScan for scanning holds into 3D models
 - GitHub for version control and sharing
+
+## Demo
+- Player movement
+- Basic wall placement physics
+- Holds inventory
+- Holds placement
+- 3D scan proof of concept
+- Wall texture/drill holes
