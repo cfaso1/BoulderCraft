@@ -83,6 +83,11 @@
 - Hand measured for size
 - Texture and no-tex must be scanned aswell
 - Shape/size over detail
+- Workflow per hold:
+    - Import FBX → Decimate modifier (target ~5k tris) →
+    - Clean up artifacts → Set scale/origin to mounting face center →
+    - Export display FBX + export collision FBX separately
+
 
 ## Saving and Sharing
 - Player can save their current route
