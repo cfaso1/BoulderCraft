@@ -10,14 +10,22 @@ public class PlayerCam : MonoBehaviour
 
     float xRotation;
     float yRotation;
+    bool cameraLocked;
 
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        cameraLocked = false;
     }
 
     private void Update()
+    {
+        if (!cameraLocked) MoveCamera();
+        if (Input.GetKeyDown(KeyCode.E)) ToggleCursor();
+    }
+
+    public void MoveCamera()
     {
         // Get mouse input
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
@@ -31,8 +39,22 @@ public class PlayerCam : MonoBehaviour
         // Rotate cam and orientation
         transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
         orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+
     }
 
-
-
+    public void ToggleCursor()
+    {
+        if (Cursor.visible)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            cameraLocked = false;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            cameraLocked = true;
+        }
+    }
 }
