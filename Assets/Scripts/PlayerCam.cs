@@ -29,16 +29,20 @@ public class PlayerCam : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             ToggleCursor();
+            // TODO Toggle UI
         }
     }
 
     public void MoveCamera()
     {
+        // Get mouse inputs
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
 
+        // If the mouse has moved, move the camera
         if (!(mouseX == 0 && mouseY == 0))
         {
+            // Use original rotation after exiting menu
             if (skipNextInput)
             {
                 xRotation = xRotationSaved;
@@ -51,6 +55,8 @@ public class PlayerCam : MonoBehaviour
                 xRotation -= mouseY;
                 xRotation = Mathf.Clamp(xRotation, -90f, 90f);
             }
+
+            // Move camera
             transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
             orientation.rotation = Quaternion.Euler(0, yRotation, 0);
         }
