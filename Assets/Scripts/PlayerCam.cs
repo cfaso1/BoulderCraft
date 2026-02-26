@@ -10,36 +10,50 @@ public class PlayerCam : MonoBehaviour
 
     float xRotation;
     float yRotation;
-    bool cameraLocked;
+    float xRotationSaved;
+    float yRotationSaved;
+    bool cameraFree;
+    bool skipNextInput;
 
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        cameraLocked = false;
+        cameraFree = true;
+        skipNextInput = false;
     }
 
     private void Update()
     {
-        if (!cameraLocked) MoveCamera();
-        if (Input.GetKeyDown(KeyCode.E)) ToggleCursor();
+        if (cameraFree) MoveCamera();
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ToggleCursor();
+        }
     }
 
     public void MoveCamera()
     {
-        // Get mouse input
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
 
-        yRotation += mouseX;
-
-        xRotation -= mouseY;
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
-        // Rotate cam and orientation
-        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        orientation.rotation = Quaternion.Euler(0, yRotation, 0);
-
+        if (!(mouseX == 0 && mouseY == 0))
+        {
+            if (skipNextInput)
+            {
+                xRotation = xRotationSaved;
+                yRotation = yRotationSaved;
+                skipNextInput = false;
+            }
+            else
+            {
+                yRotation += mouseX;
+                xRotation -= mouseY;
+                xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+            }
+            transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+        }
     }
 
     public void ToggleCursor()
@@ -48,13 +62,16 @@ public class PlayerCam : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            cameraLocked = false;
+            cameraFree = true;
         }
         else
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
-            cameraLocked = true;
+            cameraFree = false;
+            xRotationSaved = xRotation;
+            yRotationSaved = yRotation;
+            skipNextInput = true;
         }
     }
 }
