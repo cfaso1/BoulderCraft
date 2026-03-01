@@ -910,7 +910,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: 0c2bd101690d263cc9ec153b1201363d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: eb562294acbebc2e38f7a6af42683452, type: 2}
+      objectReference: {fileID: 2100000, guid: 7cba34ad699fd8b7b91a747bb76faa56, type: 2}
     - target: {fileID: 919132149155446097, guid: 0c2bd101690d263cc9ec153b1201363d, type: 3}
       propertyPath: m_Name
       value: rock_hold_6_sloper
@@ -2854,6 +2854,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 5983826073745383754, guid: 3e0475fd80c6a45219c85b050d28360f, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 342c4e9471ac822ada962b7be277df2c, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2911,6 +2915,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: rock_hold_3
       objectReference: {fileID: 0}
+    - target: {fileID: 6195545543240854528, guid: 1d3d974d7d8fc2b90831983b91c147b4, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f0b569df7ee65f97884167ddabe0fb13, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
