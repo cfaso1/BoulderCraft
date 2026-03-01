@@ -69,6 +69,7 @@ public class PlayerCam : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             cameraFree = true;
+            PlacementManager.SetPlacementMode(false);
         }
         else
         {
@@ -78,6 +79,7 @@ public class PlayerCam : MonoBehaviour
             xRotationSaved = xRotation;
             yRotationSaved = yRotation;
             skipNextInput = true;
+            PlacementManager.SetPlacementMode(true);
         }
     }
 }
