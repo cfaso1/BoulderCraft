@@ -12,6 +12,7 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] HoldToolbar toolbar;
 
     GameObject selectedHold;
+    HoldBehavior selectedBehavior;
     float holdRotationAngle = 0f;
     Vector3 lastWallNormal = Vector3.forward;
 
@@ -67,6 +68,7 @@ public class PlacementManager : MonoBehaviour
         Quaternion userRotation = Quaternion.AngleAxis(holdRotationAngle, normal);
         selectedHold.transform.rotation = userRotation * baseOrientation;
         selectedHold.transform.position = hit.point + normal * surfaceOffset;
+        selectedBehavior.rotationAngle = holdRotationAngle;
     }
 
     void ApplyCurrentRotation()
@@ -78,6 +80,7 @@ public class PlacementManager : MonoBehaviour
             refUp = Vector3.ProjectOnPlane(Vector3.forward, normal).normalized;
         Quaternion baseOrientation = Quaternion.LookRotation(refUp, normal) * Quaternion.Euler(-90f, 0f, 0f);
         selectedHold.transform.rotation = Quaternion.AngleAxis(holdRotationAngle, normal) * baseOrientation;
+        selectedBehavior.rotationAngle = holdRotationAngle;
     }
 
     void Select(GameObject hold)
@@ -85,16 +88,18 @@ public class PlacementManager : MonoBehaviour
         if (selectedHold == hold) return;
         Deselect();
         selectedHold = hold;
-        holdRotationAngle = 0f;
-        selectedHold.GetComponent<HoldBehavior>().SetHighlight(true);
+        selectedBehavior = hold.GetComponent<HoldBehavior>();
+        holdRotationAngle = selectedBehavior.rotationAngle;
+        selectedBehavior.SetHighlight(true);
         toolbar.Show();
     }
 
     void Deselect()
     {
         if (selectedHold == null) return;
-        selectedHold.GetComponent<HoldBehavior>().SetHighlight(false);
+        selectedBehavior.SetHighlight(false);
         selectedHold = null;
+        selectedBehavior = null;
         toolbar.Hide();
     }
 
@@ -107,7 +112,7 @@ public class PlacementManager : MonoBehaviour
     public void DuplicateSelected()
     {
         if (selectedHold == null) return;
-        selectedHold.GetComponent<HoldBehavior>().SetHighlight(false);
+        selectedBehavior.SetHighlight(false);
         Vector3 normal = lastWallNormal;
         Vector3 refUp = Vector3.ProjectOnPlane(Vector3.up, normal).normalized;
         if (refUp.sqrMagnitude < 0.01f) refUp = Vector3.ProjectOnPlane(Vector3.forward, normal).normalized;
