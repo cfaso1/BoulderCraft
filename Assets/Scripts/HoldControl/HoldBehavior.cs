@@ -9,9 +9,19 @@ public class HoldBehavior : MonoBehaviour
     public HoldType holdType;
     public HoldSize holdSize;
     public Color holdColor = Color.white;
+    [SerializeField] Material highlightMaterial;
+
+    Renderer rend;
+    Material originalMaterial;
+
+    void Start()
+    {
+        rend = GetComponentInChildren<Renderer>();
+        originalMaterial = rend.material;
+    }
 
     public void SetHighlight(bool highlighted)
     {
-        // TODO: swap to highlight material when highlighted, restore original when not
+        rend.material = highlighted ? highlightMaterial : originalMaterial;
     }
 }

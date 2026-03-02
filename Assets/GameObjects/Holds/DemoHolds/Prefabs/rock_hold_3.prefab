@@ -79,6 +79,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 594acf486417da5aba98f370385484f7, type: 3}
       insertIndex: -1
       addedObject: {fileID: -1326429327867239329}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 594acf486417da5aba98f370385484f7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -2627714687177172195}
   m_SourcePrefab: {fileID: 100100000, guid: 594acf486417da5aba98f370385484f7, type: 3}
 --- !u!1 &5690865102045023701 stripped
 GameObject:
@@ -107,3 +110,20 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 6510190323517881012, guid: 594acf486417da5aba98f370385484f7, type: 3}
+--- !u!114 &-2627714687177172195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5690865102045023701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beefb5949299683b897e65cfd7d3dee9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoldBehavior
+  holdId: 3
+  holdType: 1
+  holdSize: 0
+  holdColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  highlightMaterial: {fileID: 2100000, guid: 89388f743ae0e9a70b6ec00c80b61b98, type: 2}
