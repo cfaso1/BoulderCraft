@@ -1,0 +1,130 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &4717166661840174652
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 5.7314835
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.12
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.9661698
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f6bd23b356ec6bc17b623b804dd0c3a7, type: 2}
+    - target: {fileID: 919132149155446097, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      propertyPath: m_Name
+      value: rock_hold_16_tiny
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -5900507832830428287}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5746116735104419747}
+  m_SourcePrefab: {fileID: 100100000, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+--- !u!1 &5600181915605877613 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+  m_PrefabInstance: {fileID: 4717166661840174652}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &-5900507832830428287
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5600181915605877613}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -3637533362501757993, guid: baf79b961cc86dd82bc85e3ec6e30f14, type: 3}
+--- !u!114 &5746116735104419747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5600181915605877613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beefb5949299683b897e65cfd7d3dee9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HoldBehavior
+  holdId: 16
+  holdType: 1
+  holdSize: 0
+  holdColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  rotationAngle: 0
+  highlightMaterial: {fileID: 2100000, guid: f4908ba2ff398a42ea7449fde744b7e9, type: 2}
