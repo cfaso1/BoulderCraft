@@ -1,0 +1,13 @@
+# Unity YAML files — use UnityYAMLMerge for conflict resolution
+*.unity    merge=unityyamlmerge eol=lf
+*.prefab   merge=unityyamlmerge eol=lf
+*.asset    merge=unityyamlmerge eol=lf
+*.mat      merge=unityyamlmerge eol=lf
+*.meta     merge=unityyamlmerge eol=lf
+
+# Treat binary files as binary so Git never tries to text-merge them
+*.fbx      binary
+*.png      binary
+*.jpg      binary
+*.wav      binary
+*.mp3      binary
