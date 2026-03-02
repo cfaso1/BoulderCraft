@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlacementManager : MonoBehaviour
 {
@@ -8,8 +9,13 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] LayerMask wallLayer;
     [SerializeField] LayerMask matLayer;
     [SerializeField] float surfaceOffset = 0.02f;
+    [SerializeField] HoldToolbar toolbar;
 
     GameObject selectedHold;
+    float holdRotationAngle = 0f;
+    Vector3 lastWallNormal = Vector3.forward;
+
+    public float HoldRotationAngle => holdRotationAngle;
 
     public static void SetPlacementMode(bool active)
     {
@@ -26,7 +32,16 @@ public class PlacementManager : MonoBehaviour
             return;
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (selectedHold != null)
+        {
+            if (Input.GetKeyDown(KeyCode.Delete)) DeleteSelected();
+            if (Input.GetKeyDown(KeyCode.D) && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)))
+                DuplicateSelected();
+        }
+
+        bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+
+        if (Input.GetMouseButtonDown(0) && !overUI)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, holdLayer))
@@ -35,7 +50,7 @@ public class PlacementManager : MonoBehaviour
                 Deselect();
         }
 
-        if (Input.GetMouseButton(0) && selectedHold != null)
+        if (Input.GetMouseButton(0) && selectedHold != null && !overUI)
             DragSelectedHold();
     }
 
@@ -45,13 +60,27 @@ public class PlacementManager : MonoBehaviour
         if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, wallLayer | matLayer)) return;
 
         Vector3 normal = hit.normal;
+        lastWallNormal = normal;
+
         Vector3 refUp = Vector3.ProjectOnPlane(Vector3.up, normal).normalized;
         if (refUp.sqrMagnitude < 0.01f)
             refUp = Vector3.ProjectOnPlane(Vector3.forward, normal).normalized;
 
-        // Euler corrects base direction
-        selectedHold.transform.rotation = Quaternion.LookRotation(refUp, normal) * Quaternion.Euler(-90f, 0f, 0f);
+        Quaternion baseOrientation = Quaternion.LookRotation(refUp, normal) * Quaternion.Euler(-90f, 0f, 0f);
+        Quaternion userRotation    = Quaternion.AngleAxis(holdRotationAngle, normal);
+        selectedHold.transform.rotation = userRotation * baseOrientation;
         selectedHold.transform.position = hit.point + normal * surfaceOffset;
+    }
+
+    void ApplyCurrentRotation()
+    {
+        if (selectedHold == null) return;
+        Vector3 normal = lastWallNormal;
+        Vector3 refUp = Vector3.ProjectOnPlane(Vector3.up, normal).normalized;
+        if (refUp.sqrMagnitude < 0.01f)
+            refUp = Vector3.ProjectOnPlane(Vector3.forward, normal).normalized;
+        Quaternion baseOrientation = Quaternion.LookRotation(refUp, normal) * Quaternion.Euler(-90f, 0f, 0f);
+        selectedHold.transform.rotation = Quaternion.AngleAxis(holdRotationAngle, normal) * baseOrientation;
     }
 
     void Select(GameObject hold)
@@ -59,7 +88,9 @@ public class PlacementManager : MonoBehaviour
         if (selectedHold == hold) return;
         Deselect();
         selectedHold = hold;
+        holdRotationAngle = 0f;
         selectedHold.GetComponent<HoldBehavior>().SetHighlight(true);
+        toolbar.Show();
     }
 
     void Deselect()
@@ -67,5 +98,38 @@ public class PlacementManager : MonoBehaviour
         if (selectedHold == null) return;
         selectedHold.GetComponent<HoldBehavior>().SetHighlight(false);
         selectedHold = null;
+        toolbar.Hide();
+    }
+
+    public void AddRotation(float delta)
+    {
+        holdRotationAngle += delta;
+        ApplyCurrentRotation();
+    }
+
+    public void DuplicateSelected()
+    {
+        if (selectedHold == null) return;
+        // Unhighlight before instantiating so the copy's Awake() captures the original material
+        selectedHold.GetComponent<HoldBehavior>().SetHighlight(false);
+        Vector3 normal = lastWallNormal;
+        Vector3 refUp = Vector3.ProjectOnPlane(Vector3.up, normal).normalized;
+        if (refUp.sqrMagnitude < 0.01f) refUp = Vector3.ProjectOnPlane(Vector3.forward, normal).normalized;
+        GameObject copy = Instantiate(selectedHold, selectedHold.transform.position + refUp * 0.1f, selectedHold.transform.rotation);
+        Select(copy);
+    }
+
+    public void DeleteSelected()
+    {
+        if (selectedHold == null) return;
+        GameObject toDestroy = selectedHold;
+        Deselect();
+        Destroy(toDestroy);
+    }
+
+    public void ExitPlacementMode()
+    {
+        IsPlacementMode = false;
+        Deselect();
     }
 }

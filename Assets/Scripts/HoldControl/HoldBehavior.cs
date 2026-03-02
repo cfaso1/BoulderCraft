@@ -14,7 +14,7 @@ public class HoldBehavior : MonoBehaviour
     Renderer rend;
     Material originalMaterial;
 
-    void Start()
+    void Awake()
     {
         rend = GetComponentInChildren<Renderer>();
         originalMaterial = rend.material;

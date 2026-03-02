@@ -7,6 +7,7 @@ public class PlayerCam : MonoBehaviour
     public float sensY;
 
     public Transform orientation;
+    [SerializeField] PlacementManager placementManager;
 
     float xRotation;
     float yRotation;
@@ -69,7 +70,7 @@ public class PlayerCam : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             cameraFree = true;
-            PlacementManager.SetPlacementMode(false);
+            placementManager.ExitPlacementMode();
         }
         else
         {
