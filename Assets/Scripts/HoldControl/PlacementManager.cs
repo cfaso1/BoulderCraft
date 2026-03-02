@@ -17,10 +17,7 @@ public class PlacementManager : MonoBehaviour
 
     public float HoldRotationAngle => holdRotationAngle;
 
-    public static void SetPlacementMode(bool active)
-    {
-        IsPlacementMode = active;
-    }
+    public static void SetPlacementMode(bool active) { IsPlacementMode = active; }
 
     void Update()
     {
@@ -50,7 +47,7 @@ public class PlacementManager : MonoBehaviour
                 Deselect();
         }
 
-        if (Input.GetMouseButton(0) && selectedHold != null && !overUI)
+        if (Input.GetMouseButton(0) && selectedHold != null && !overUI && !toolbar.IsRotating)
             DragSelectedHold();
     }
 
@@ -67,7 +64,7 @@ public class PlacementManager : MonoBehaviour
             refUp = Vector3.ProjectOnPlane(Vector3.forward, normal).normalized;
 
         Quaternion baseOrientation = Quaternion.LookRotation(refUp, normal) * Quaternion.Euler(-90f, 0f, 0f);
-        Quaternion userRotation    = Quaternion.AngleAxis(holdRotationAngle, normal);
+        Quaternion userRotation = Quaternion.AngleAxis(holdRotationAngle, normal);
         selectedHold.transform.rotation = userRotation * baseOrientation;
         selectedHold.transform.position = hit.point + normal * surfaceOffset;
     }
@@ -110,7 +107,6 @@ public class PlacementManager : MonoBehaviour
     public void DuplicateSelected()
     {
         if (selectedHold == null) return;
-        // Unhighlight before instantiating so the copy's Awake() captures the original material
         selectedHold.GetComponent<HoldBehavior>().SetHighlight(false);
         Vector3 normal = lastWallNormal;
         Vector3 refUp = Vector3.ProjectOnPlane(Vector3.up, normal).normalized;
