@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dd1aeb10ba55094aaceae467904f2ca, type: 3}
+  m_Name: Hold4
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemName: Hold4
+  icon: {fileID: 0}
+  primaryColor: {r: 0, g: 1, b: 0, a: 1}
+  colorCaregory: 
+  holdPrefab: {fileID: 919132149155446097, guid: fafc86c1ab4cfc140a6a8589b5a369c1, type: 3}

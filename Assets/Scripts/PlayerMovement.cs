@@ -27,6 +27,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (InventoryUI.Instance != null && InventoryUI.Instance.inventoryPanel.activeSelf)
+            return;
+
         MyInput();
         rb.linearDamping = drag;
         SpeedControl();
@@ -34,6 +37,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (InventoryUI.Instance != null && InventoryUI.Instance.inventoryPanel.activeSelf)
+            return;
+
         MovePlayer();
         if (Input.GetKey(upKey)) FlyUp();
         if (Input.GetKey(downKey)) FlyDown();

@@ -6,6 +6,8 @@ public class MoveCamera : MonoBehaviour
 
     private void Update()
     {
+        if (InventoryUI.Instance != null && InventoryUI.Instance.inventoryPanel.activeSelf)
+            return;
         transform.position = cameraPosition.position;
     }
 }
