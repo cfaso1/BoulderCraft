@@ -8,7 +8,7 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] LayerMask holdLayer;
     [SerializeField] LayerMask wallLayer;
     [SerializeField] LayerMask matLayer;
-    [SerializeField] float surfaceOffset = 0.02f;
+    [SerializeField] float surfaceOffset = 0.01f;
     [SerializeField] HoldToolbar toolbar;
 
     GameObject selectedHold;
