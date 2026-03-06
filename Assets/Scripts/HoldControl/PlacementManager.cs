@@ -10,6 +10,7 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] LayerMask matLayer;
     [SerializeField] float surfaceOffset = 0.01f;
     [SerializeField] HoldToolbar toolbar;
+    [SerializeField] bool snapToBolts = true;
 
     GameObject selectedHold;
     HoldBehavior selectedBehavior;
@@ -64,10 +65,18 @@ public class PlacementManager : MonoBehaviour
         if (refUp.sqrMagnitude < 0.01f)
             refUp = Vector3.ProjectOnPlane(Vector3.forward, normal).normalized;
 
-        Quaternion baseOrientation = Quaternion.LookRotation(refUp, normal) * Quaternion.Euler(-90f, 0f, 0f);
+        Quaternion baseOrientation = Quaternion.LookRotation(refUp, normal);
         Quaternion userRotation = Quaternion.AngleAxis(holdRotationAngle, normal);
         selectedHold.transform.rotation = userRotation * baseOrientation;
-        selectedHold.transform.position = hit.point + normal * surfaceOffset;
+
+        Vector3 placementPos = hit.point;
+        if (snapToBolts)
+        {
+            WallPanel panel = hit.collider.GetComponentInParent<WallPanel>();
+            if (panel != null)
+                placementPos = panel.GetNearestBolt(hit.point);
+        }
+        selectedHold.transform.position = placementPos + normal * surfaceOffset;
         selectedBehavior.rotationAngle = holdRotationAngle;
     }
 
@@ -78,7 +87,7 @@ public class PlacementManager : MonoBehaviour
         Vector3 refUp = Vector3.ProjectOnPlane(Vector3.up, normal).normalized;
         if (refUp.sqrMagnitude < 0.01f)
             refUp = Vector3.ProjectOnPlane(Vector3.forward, normal).normalized;
-        Quaternion baseOrientation = Quaternion.LookRotation(refUp, normal) * Quaternion.Euler(-90f, 0f, 0f);
+        Quaternion baseOrientation = Quaternion.LookRotation(refUp, normal);
         selectedHold.transform.rotation = Quaternion.AngleAxis(holdRotationAngle, normal) * baseOrientation;
         selectedBehavior.rotationAngle = holdRotationAngle;
     }

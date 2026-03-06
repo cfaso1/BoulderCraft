@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum HoldType { Jug, Crimp, Sloper, Pinch, Pocket, Volume }
+public enum HoldType { Jug, Crimp, Sloper, Pinch, Pocket, Foothold, Volume }
 public enum HoldSize { Small, Medium, Large }
 
 public class HoldBehavior : MonoBehaviour
