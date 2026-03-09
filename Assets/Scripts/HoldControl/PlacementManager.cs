@@ -10,12 +10,12 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] LayerMask matLayer;
     [SerializeField] float surfaceOffset = 0.01f;
     [SerializeField] HoldToolbar toolbar;
-    [SerializeField] bool snapToBolts = true;
 
     GameObject selectedHold;
     HoldBehavior selectedBehavior;
     float holdRotationAngle = 0f;
     Vector3 lastWallNormal = Vector3.forward;
+    Vector3 dragOffset = Vector3.zero;
 
     public float HoldRotationAngle => holdRotationAngle;
 
@@ -25,12 +25,14 @@ public class PlacementManager : MonoBehaviour
     {
         if (!IsPlacementMode) return;
 
+        // Deselect hold
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Deselect();
             return;
         }
 
+        // Delete and dupllicate hold
         if (selectedHold != null)
         {
             if (Input.GetKeyDown(KeyCode.Delete)) DeleteSelected();
@@ -40,15 +42,26 @@ public class PlacementManager : MonoBehaviour
 
         bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
 
+        // Select hold on click
         if (Input.GetMouseButtonDown(0) && !overUI)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, holdLayer))
+            {
                 Select(hit.collider.gameObject);
+                if (Physics.Raycast(ray, out RaycastHit wallHit, Mathf.Infinity, wallLayer | matLayer))
+                {
+                    Vector3 rawOffset = selectedHold.transform.position - (wallHit.point + wallHit.normal * surfaceOffset);
+                    dragOffset = Vector3.ProjectOnPlane(rawOffset, wallHit.normal);
+                }
+                else
+                    dragOffset = Vector3.zero;
+            }
             else
                 Deselect();
         }
 
+        // Move hold on drag
         if (Input.GetMouseButton(0) && selectedHold != null && !overUI && !toolbar.IsRotating)
             DragSelectedHold();
     }
@@ -65,18 +78,12 @@ public class PlacementManager : MonoBehaviour
         if (refUp.sqrMagnitude < 0.01f)
             refUp = Vector3.ProjectOnPlane(Vector3.forward, normal).normalized;
 
-        Quaternion baseOrientation = Quaternion.LookRotation(refUp, normal);
+        Quaternion baseOrientation = Quaternion.LookRotation(refUp, normal) * Quaternion.Euler(-90f, 0f, 0f);
         Quaternion userRotation = Quaternion.AngleAxis(holdRotationAngle, normal);
         selectedHold.transform.rotation = userRotation * baseOrientation;
 
-        Vector3 placementPos = hit.point;
-        if (snapToBolts)
-        {
-            WallPanel panel = hit.collider.GetComponentInParent<WallPanel>();
-            if (panel != null)
-                placementPos = panel.GetNearestBolt(hit.point);
-        }
-        selectedHold.transform.position = placementPos + normal * surfaceOffset;
+        Vector3 wallAlignedOffset = Vector3.ProjectOnPlane(dragOffset, normal);
+        selectedHold.transform.position = hit.point + normal * surfaceOffset + wallAlignedOffset;
         selectedBehavior.rotationAngle = holdRotationAngle;
     }
 
@@ -87,7 +94,7 @@ public class PlacementManager : MonoBehaviour
         Vector3 refUp = Vector3.ProjectOnPlane(Vector3.up, normal).normalized;
         if (refUp.sqrMagnitude < 0.01f)
             refUp = Vector3.ProjectOnPlane(Vector3.forward, normal).normalized;
-        Quaternion baseOrientation = Quaternion.LookRotation(refUp, normal);
+        Quaternion baseOrientation = Quaternion.LookRotation(refUp, normal) * Quaternion.Euler(-90f, 0f, 0f);
         selectedHold.transform.rotation = Quaternion.AngleAxis(holdRotationAngle, normal) * baseOrientation;
         selectedBehavior.rotationAngle = holdRotationAngle;
     }
@@ -126,6 +133,7 @@ public class PlacementManager : MonoBehaviour
         Vector3 refUp = Vector3.ProjectOnPlane(Vector3.up, normal).normalized;
         if (refUp.sqrMagnitude < 0.01f) refUp = Vector3.ProjectOnPlane(Vector3.forward, normal).normalized;
         GameObject copy = Instantiate(selectedHold, selectedHold.transform.position + refUp * 0.1f, selectedHold.transform.rotation);
+        copy.transform.localScale = selectedHold.transform.localScale;
         Select(copy);
     }
 
