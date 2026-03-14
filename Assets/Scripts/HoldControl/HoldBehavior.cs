@@ -10,6 +10,7 @@ public class HoldBehavior : MonoBehaviour
     public HoldSize holdSize;
     public Color holdColor = Color.white;
     public float rotationAngle = 0f;
+    public bool isLocked = false;
     [SerializeField] Material highlightMaterial;
 
     Renderer rend;

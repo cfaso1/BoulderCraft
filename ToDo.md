@@ -2,7 +2,6 @@
 
 ## Mechanics
 - Ruler physics - Display units from A to B in 3D space
-- Lock hold - Lock hold in place to not accidentally move it
 - Save/Load - Save current hold placements and open previous saves
 
 ## UI/UX
@@ -17,7 +16,6 @@
         - Size - Diameter of hold least>greatest and greatest>least
         - Brand? - Holds from same brand/set go usually go together
 - Toolbar - While a hold is selected, open a toolbar for editing
-    - Lock/unlock hold - Locked cannot be edited
     - Change rotation method and show angle degrees
     - Change buttons to white rounded square and blue icons
     - Move it to a better location

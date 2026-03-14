@@ -39,10 +39,10 @@ public class PlacementManager : MonoBehaviour
             return;
         }
 
-        // Delete and dupllicate hold
+        // Delete and duplicate hold
         if (selectedHold != null)
         {
-            if (Input.GetKeyDown(KeyCode.Delete)) DeleteSelected();
+            if (Input.GetKeyDown(KeyCode.Delete) && !selectedBehavior.isLocked) DeleteSelected();
             if (Input.GetKeyDown(KeyCode.D) && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)))
                 DuplicateSelected();
         }
@@ -69,7 +69,7 @@ public class PlacementManager : MonoBehaviour
         }
 
         // Move hold on drag
-        if (Input.GetMouseButton(0) && selectedHold != null && !overUI && !toolbar.IsRotating)
+        if (Input.GetMouseButton(0) && selectedHold != null && !overUI && !toolbar.IsRotating && !selectedBehavior.isLocked)
             DragSelectedHold();
     }
 
@@ -123,7 +123,7 @@ public class PlacementManager : MonoBehaviour
         selectedBehavior = hold.GetComponent<HoldBehavior>();
         holdRotationAngle = selectedBehavior.rotationAngle;
         selectedBehavior.SetHighlight(true);
-        toolbar.Show();
+        toolbar.Show(selectedBehavior.isLocked);
     }
 
     void Deselect()
@@ -137,8 +137,16 @@ public class PlacementManager : MonoBehaviour
 
     public void AddRotation(float delta)
     {
+        if (selectedBehavior != null && selectedBehavior.isLocked) return;
         holdRotationAngle += delta;
         ApplyCurrentRotation();
+    }
+
+    public void ToggleLock()
+    {
+        if (selectedBehavior == null) return;
+        selectedBehavior.isLocked = !selectedBehavior.isLocked;
+        toolbar.UpdateLockState(selectedBehavior.isLocked);
     }
 
     public void DuplicateSelected()
@@ -150,12 +158,13 @@ public class PlacementManager : MonoBehaviour
         if (refUp.sqrMagnitude < 0.01f) refUp = Vector3.ProjectOnPlane(Vector3.forward, normal).normalized;
         GameObject copy = Instantiate(selectedHold, selectedHold.transform.position + refUp * 0.1f, selectedHold.transform.rotation);
         copy.transform.localScale = selectedHold.transform.localScale;
+        copy.GetComponent<HoldBehavior>().isLocked = false;
         Select(copy);
     }
 
     public void DeleteSelected()
     {
-        if (selectedHold == null) return;
+        if (selectedHold == null || selectedBehavior.isLocked) return;
         GameObject toDestroy = selectedHold;
         Deselect();
         Destroy(toDestroy);
