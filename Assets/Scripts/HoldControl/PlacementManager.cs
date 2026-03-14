@@ -10,6 +10,9 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] LayerMask matLayer;
     [SerializeField] float surfaceOffset = 0.01f;
     [SerializeField] HoldToolbar toolbar;
+    [SerializeField] BoltGrid boltGrid;
+
+    public bool SnapToGrid { get; private set; }
 
     GameObject selectedHold;
     HoldBehavior selectedBehavior;
@@ -24,6 +27,10 @@ public class PlacementManager : MonoBehaviour
     void Update()
     {
         if (!IsPlacementMode) return;
+
+        // Toggle bolt snap
+        if (Input.GetKeyDown(KeyCode.Tab))
+            SnapToGrid = !SnapToGrid;
 
         // Deselect hold
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -83,7 +90,16 @@ public class PlacementManager : MonoBehaviour
         selectedHold.transform.rotation = userRotation * baseOrientation;
 
         Vector3 wallAlignedOffset = Vector3.ProjectOnPlane(dragOffset, normal);
-        selectedHold.transform.position = hit.point + normal * surfaceOffset + wallAlignedOffset;
+        Vector3 rawPosition = hit.point + wallAlignedOffset;
+
+        if (SnapToGrid && boltGrid != null)
+        {
+            Vector3 nearestBolt = boltGrid.FindNearestBolt(rawPosition, normal);
+            // Keep the bolt's wall-plane position but use the raycast surface depth
+            rawPosition = Vector3.ProjectOnPlane(nearestBolt - hit.point, normal) + hit.point;
+        }
+
+        selectedHold.transform.position = rawPosition + normal * surfaceOffset;
         selectedBehavior.rotationAngle = holdRotationAngle;
     }
 
