@@ -11,6 +11,7 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] float surfaceOffset = 0.01f;
     [SerializeField] HoldToolbar toolbar;
     [SerializeField] BoltGrid boltGrid;
+    [SerializeField] Texture2D dragCursor;
 
     public bool SnapToGrid { get; private set; }
 
@@ -70,7 +71,17 @@ public class PlacementManager : MonoBehaviour
 
         // Move hold on drag
         if (Input.GetMouseButton(0) && selectedHold != null && !overUI && !toolbar.IsRotating && !selectedBehavior.isLocked)
+        {
             DragSelectedHold();
+            Cursor.SetCursor(dragCursor, new Vector2(16, 18), CursorMode.Auto);
+        }
+        else if (!toolbar.IsRotating)
+        {
+            if (overUI)
+                Cursor.SetCursor(PlayerCam.HoverCursor, new Vector2(11, 1), CursorMode.Auto);
+            else
+                Cursor.SetCursor(PlayerCam.DefaultCursor, new Vector2(7, 3), CursorMode.Auto);
+        }
     }
 
     void DragSelectedHold()
@@ -95,7 +106,6 @@ public class PlacementManager : MonoBehaviour
         if (SnapToGrid && boltGrid != null)
         {
             Vector3 nearestBolt = boltGrid.FindNearestBolt(rawPosition, normal);
-            // Keep the bolt's wall-plane position but use the raycast surface depth
             rawPosition = Vector3.ProjectOnPlane(nearestBolt - hit.point, normal) + hit.point;
         }
 

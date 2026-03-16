@@ -852,6 +852,8 @@ MonoBehaviour:
   sensY: 400
   orientation: {fileID: 515431243}
   placementManager: {fileID: 1388477263}
+  defaultCursor: {fileID: 2800000, guid: 6dfc37f6309226d359a534d4d845a695, type: 3}
+  hoverCursor: {fileID: 2800000, guid: 763bd62850f97f910b7781fe056b5f94, type: 3}
 --- !u!4 &751753460 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3986731819563226673, guid: 18a89e8b8c6cb42569e97480998d1ce6, type: 3}
@@ -1550,7 +1552,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3137255, g: 0.3137255, b: 0.3137255, a: 0.78431374}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5019608}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1870,6 +1872,7 @@ MonoBehaviour:
   surfaceOffset: 0.01
   toolbar: {fileID: 1378919044}
   boltGrid: {fileID: 638193403}
+  dragCursor: {fileID: 2800000, guid: 652a45a936d3047f8be1305a0dc66442, type: 3}
 --- !u!4 &1481356018 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2534403108952079460, guid: 0b1c8102291d8989fb4a92205ff1875a, type: 3}
@@ -2087,7 +2090,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AngleDragField
   sensitivity: 1
-  rotateCursor: {fileID: 2800000, guid: d08f7555ecaa073fea9b73549169e401, type: 3}
+  rotateCursor: {fileID: 2800000, guid: 282cce6adee6643028a39cf2d9e4a6bc, type: 3}
 --- !u!114 &1503580165
 MonoBehaviour:
   m_ObjectHideFlags: 0

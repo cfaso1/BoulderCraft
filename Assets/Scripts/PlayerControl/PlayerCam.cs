@@ -8,6 +8,11 @@ public class PlayerCam : MonoBehaviour
 
     public Transform orientation;
     [SerializeField] PlacementManager placementManager;
+    [SerializeField] Texture2D defaultCursor;
+    [SerializeField] Texture2D hoverCursor;
+
+    public static Texture2D DefaultCursor { get; private set; }
+    public static Texture2D HoverCursor { get; private set; }
 
     float xRotation;
     float yRotation;
@@ -18,6 +23,8 @@ public class PlayerCam : MonoBehaviour
 
     private void Start()
     {
+        DefaultCursor = defaultCursor;
+        HoverCursor = hoverCursor;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         cameraFree = true;
@@ -76,6 +83,7 @@ public class PlayerCam : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
+            Cursor.SetCursor(defaultCursor, new Vector2(7, 3), CursorMode.Auto);
             cameraFree = false;
             xRotationSaved = xRotation;
             yRotationSaved = yRotation;

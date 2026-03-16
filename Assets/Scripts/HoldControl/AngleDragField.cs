@@ -6,17 +6,19 @@ public class AngleDragField : MonoBehaviour, IPointerDownHandler, IDragHandler, 
     [SerializeField] float sensitivity = 1f;
     [SerializeField] Texture2D rotateCursor;
 
-    public event System.Action<float> OnDelta;
     public bool IsDragging { get; private set; }
+
+    public event System.Action<float> OnDelta;
 
     static readonly Vector2 cursorHotspot = new Vector2(16, 16);
     Vector2 lastPointerPos;
 
+    // Toolbar drag (left-click on the button)
     public void OnPointerDown(PointerEventData e)
     {
-        IsDragging = true;
         lastPointerPos = e.position;
         Cursor.SetCursor(rotateCursor, cursorHotspot, CursorMode.Auto);
+        IsDragging = true;
     }
 
     public void OnDrag(PointerEventData e)
@@ -28,7 +30,31 @@ public class AngleDragField : MonoBehaviour, IPointerDownHandler, IDragHandler, 
 
     public void OnPointerUp(PointerEventData e)
     {
+        Cursor.SetCursor(PlayerCam.DefaultCursor, new Vector2(5, 1), CursorMode.Auto);
         IsDragging = false;
-        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+    }
+
+    // Global right-click drag (works anywhere on screen)
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            IsDragging = true;
+            lastPointerPos = Input.mousePosition;
+            Cursor.SetCursor(rotateCursor, cursorHotspot, CursorMode.Auto);
+        }
+
+        if (Input.GetMouseButton(1))
+        {
+            float delta = (Input.mousePosition.x - lastPointerPos.x) * sensitivity;
+            lastPointerPos = Input.mousePosition;
+            OnDelta?.Invoke(delta);
+        }
+
+        if (Input.GetMouseButtonUp(1))
+        {
+            IsDragging = false;
+            Cursor.SetCursor(PlayerCam.DefaultCursor, new Vector2(5, 1), CursorMode.Auto);
+        }
     }
 }
