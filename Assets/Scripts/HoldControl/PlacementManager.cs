@@ -8,10 +8,12 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] LayerMask holdLayer;
     [SerializeField] LayerMask wallLayer;
     [SerializeField] LayerMask matLayer;
+    [SerializeField] LayerMask volumeLayer;
     [SerializeField] float surfaceOffset = 0.01f;
     [SerializeField] HoldToolbar toolbar;
     [SerializeField] BoltGrid boltGrid;
     [SerializeField] Texture2D dragCursor;
+    [SerializeField] Transform holdContainer;
 
     public bool SnapToGrid { get; private set; }
 
@@ -20,6 +22,8 @@ public class PlacementManager : MonoBehaviour
     float holdRotationAngle = 0f;
     Vector3 lastWallNormal = Vector3.forward;
     Vector3 dragOffset = Vector3.zero;
+    Transform lastDragSurface;
+    bool isDragging;
 
     public float HoldRotationAngle => holdRotationAngle;
 
@@ -50,20 +54,34 @@ public class PlacementManager : MonoBehaviour
 
         bool overUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
 
-        // Select hold on click
+        // Finalize placement — parent hold to volume or unparent to container
+        if (Input.GetMouseButtonUp(0) && isDragging && selectedHold != null)
+        {
+            isDragging = false;
+            FinalizeHoldPlacement();
+        }
+
+        // Select hold or volume on click
         if (Input.GetMouseButtonDown(0) && !overUI)
         {
+            isDragging = false;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, holdLayer))
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, holdLayer | volumeLayer))
             {
-                Select(hit.collider.gameObject);
-                if (Physics.Raycast(ray, out RaycastHit wallHit, Mathf.Infinity, wallLayer | matLayer))
+                HoldBehavior behavior = hit.collider.GetComponentInParent<HoldBehavior>();
+                if (behavior != null)
                 {
-                    Vector3 rawOffset = selectedHold.transform.position - (wallHit.point + wallHit.normal * surfaceOffset);
-                    dragOffset = Vector3.ProjectOnPlane(rawOffset, wallHit.normal);
+                    Select(behavior.gameObject);
+                    if (RaycastSurface(ray, out RaycastHit wallHit))
+                    {
+                        Vector3 rawOffset = selectedHold.transform.position - (wallHit.point + wallHit.normal * surfaceOffset);
+                        dragOffset = Vector3.ProjectOnPlane(rawOffset, wallHit.normal);
+                    }
+                    else
+                        dragOffset = Vector3.zero;
                 }
                 else
-                    dragOffset = Vector3.zero;
+                    Deselect();
             }
             else
                 Deselect();
@@ -72,6 +90,7 @@ public class PlacementManager : MonoBehaviour
         // Move hold on drag
         if (Input.GetMouseButton(0) && selectedHold != null && !overUI && !toolbar.IsRotating && !selectedBehavior.isLocked)
         {
+            isDragging = true;
             DragSelectedHold();
             Cursor.SetCursor(dragCursor, new Vector2(16, 18), CursorMode.Auto);
         }
@@ -87,7 +106,7 @@ public class PlacementManager : MonoBehaviour
     void DragSelectedHold()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (!Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, wallLayer | matLayer)) return;
+        if (!RaycastSurface(ray, out RaycastHit hit)) return;
 
         Vector3 normal = hit.normal;
         lastWallNormal = normal;
@@ -111,6 +130,34 @@ public class PlacementManager : MonoBehaviour
 
         selectedHold.transform.position = rawPosition + normal * surfaceOffset;
         selectedBehavior.rotationAngle = holdRotationAngle;
+        lastDragSurface = hit.collider.transform;
+    }
+
+    // Raycast against all placeable surfaces, skipping the selected object's own colliders.
+    bool RaycastSurface(Ray ray, out RaycastHit hit)
+    {
+        RaycastHit[] hits = Physics.RaycastAll(ray, Mathf.Infinity, wallLayer | matLayer | volumeLayer);
+        hit = default;
+        float minDist = float.MaxValue;
+        foreach (var h in hits)
+        {
+            if (h.distance < minDist && h.collider.GetComponentInParent<HoldBehavior>() != selectedBehavior)
+            {
+                minDist = h.distance;
+                hit = h;
+            }
+        }
+        return minDist < float.MaxValue;
+    }
+
+    void FinalizeHoldPlacement()
+    {
+        if (lastDragSurface == null) return;
+        HoldBehavior volumeOnSurface = lastDragSurface.GetComponentInParent<HoldBehavior>();
+        if (volumeOnSurface != null && volumeOnSurface.holdType == HoldType.Volume && volumeOnSurface != selectedBehavior)
+            selectedHold.transform.SetParent(volumeOnSurface.transform, true);
+        else
+            selectedHold.transform.SetParent(holdContainer, true);
     }
 
     void ApplyCurrentRotation()
@@ -169,6 +216,7 @@ public class PlacementManager : MonoBehaviour
         GameObject copy = Instantiate(selectedHold, selectedHold.transform.position + refUp * 0.1f, selectedHold.transform.rotation);
         copy.transform.localScale = selectedHold.transform.localScale;
         copy.GetComponent<HoldBehavior>().isLocked = false;
+        copy.transform.SetParent(selectedHold.transform.parent, true);
         Select(copy);
     }
 
