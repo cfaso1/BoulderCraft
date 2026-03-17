@@ -35,13 +35,10 @@ public class PlayerCam : MonoBehaviour
     {
         if (cameraFree) MoveCamera();
         if (Input.GetKeyDown(KeyCode.E))
-        {
             ToggleCursor();
-            // TODO Toggle UI
-        }
     }
 
-    public void MoveCamera()
+    void MoveCamera()
     {
         // Get mouse inputs
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;

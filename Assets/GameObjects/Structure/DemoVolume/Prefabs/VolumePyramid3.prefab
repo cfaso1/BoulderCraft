@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2911685015994836465}
   - component: {fileID: 7067151687641638426}
   - component: {fileID: 8470503023680639180}
-  - component: {fileID: 5530450450386702417}
+  - component: {fileID: 5340684384070622749}
   m_Layer: 11
   m_Name: BoltGridGenerator.060
   m_TagString: Untagged
@@ -91,7 +91,7 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &5530450450386702417
+--- !u!135 &5340684384070622749
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,8 +110,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.00008253038
-  m_Center: {x: 0, y: 0.00035950443, z: -0.0000804887}
+  m_Radius: 0.000082530365
+  m_Center: {x: 0, y: 0.00035950443, z: 0.00054463453}
 --- !u!1 &5298357636699585502
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 6230914366113906818}
   - component: {fileID: 56572487417708625}
   - component: {fileID: 3471531528284112622}
-  - component: {fileID: 8813164024228696764}
+  - component: {fileID: 1452644485990289752}
   m_Layer: 11
   m_Name: BoltGridGenerator.062
   m_TagString: Untagged
@@ -203,7 +203,7 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &8813164024228696764
+--- !u!135 &1452644485990289752
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -222,8 +222,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.00008253038
-  m_Center: {x: 0.00031133997, y: -0.00017975223, z: -0.0000804887}
+  m_Radius: 0.000082530365
+  m_Center: {x: 0.00031133997, y: -0.00017975223, z: 0.00054463453}
 --- !u!1 &5734750323375434930
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,7 +235,7 @@ GameObject:
   - component: {fileID: 2900341993447957538}
   - component: {fileID: 7604750151973051014}
   - component: {fileID: 9184671322904019209}
-  - component: {fileID: 1163724641057485638}
+  - component: {fileID: 914316362538644130}
   m_Layer: 11
   m_Name: BoltGridGenerator.061
   m_TagString: Untagged
@@ -315,7 +315,7 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &1163724641057485638
+--- !u!135 &914316362538644130
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -334,8 +334,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.00008253038
-  m_Center: {x: -0.0003113399, y: -0.00017975223, z: -0.0000804887}
+  m_Radius: 0.000082530365
+  m_Center: {x: -0.0003113399, y: -0.00017975223, z: 0.00054463453}
 --- !u!1 &7289381083959625507
 GameObject:
   m_ObjectHideFlags: 0

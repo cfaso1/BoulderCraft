@@ -9,7 +9,7 @@ public class BoltGrid : MonoBehaviour
 
     readonly Collider[] _buffer = new Collider[32];
 
-    public Vector3 FindNearestBolt(Vector3 wallPoint, Vector3 wallNormal)
+    public Vector3 FindNearestBolt(Vector3 wallPoint, Vector3 wallNormal, Transform exclude = null)
     {
         int count = Physics.OverlapSphereNonAlloc(wallPoint, searchRadius, _buffer, boltLayer);
 
@@ -20,6 +20,9 @@ public class BoltGrid : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
+            if (exclude != null && _buffer[i].transform.IsChildOf(exclude))
+                continue;
+
             Vector3 boltPos = _buffer[i].bounds.center;
             Vector3 projected = Vector3.ProjectOnPlane(boltPos - wallPoint, wallNormal) + wallPoint;
             float dist = (projected - wallPoint).sqrMagnitude;

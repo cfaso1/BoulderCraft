@@ -27,50 +27,29 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        MyInput();
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
         rb.linearDamping = drag;
         SpeedControl();
     }
 
     private void FixedUpdate()
     {
-        MovePlayer();
-        if (Input.GetKey(upKey)) FlyUp();
-        if (Input.GetKey(downKey)) FlyDown();
-    }
-
-    private void MyInput()
-    {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
-    }
-
-    private void MovePlayer()
-    {
-        // Calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
         rb.AddForce(moveDirection * moveSpeed * 10f, ForceMode.Force);
+
+        if (Input.GetKey(upKey))   rb.AddForce(transform.up * flightForce, ForceMode.Force);
+        if (Input.GetKey(downKey)) rb.AddForce(-transform.up * flightForce, ForceMode.Force);
     }
 
     private void SpeedControl()
     {
         Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
-        // Limit velocity if needed
         if (flatVel.magnitude > moveSpeed)
         {
             Vector3 limitedVel = flatVel.normalized * moveSpeed;
             rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
         }
-    }
-
-    private void FlyUp()
-    {
-        rb.AddForce(transform.up * flightForce, ForceMode.Force);
-    }
-
-    private void FlyDown()
-    {
-        rb.AddForce(transform.up * flightForce * -1, ForceMode.Force);
     }
 }

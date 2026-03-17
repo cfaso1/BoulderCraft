@@ -13,7 +13,6 @@ public class PlacementManager : MonoBehaviour
     [SerializeField] HoldToolbar toolbar;
     [SerializeField] BoltGrid boltGrid;
     [SerializeField] Texture2D dragCursor;
-    [SerializeField] Transform holdContainer;
 
     public bool SnapToGrid { get; private set; }
 
@@ -24,8 +23,6 @@ public class PlacementManager : MonoBehaviour
     Vector3 dragOffset = Vector3.zero;
     Transform lastDragSurface;
     bool isDragging;
-
-    public float HoldRotationAngle => holdRotationAngle;
 
     public static void SetPlacementMode(bool active) { IsPlacementMode = active; }
 
@@ -124,8 +121,9 @@ public class PlacementManager : MonoBehaviour
 
         if (SnapToGrid && boltGrid != null)
         {
-            Vector3 nearestBolt = boltGrid.FindNearestBolt(rawPosition, normal);
+            Vector3 nearestBolt = boltGrid.FindNearestBolt(hit.point, normal, selectedHold.transform);
             rawPosition = Vector3.ProjectOnPlane(nearestBolt - hit.point, normal) + hit.point;
+
         }
 
         selectedHold.transform.position = rawPosition + normal * surfaceOffset;
@@ -157,7 +155,7 @@ public class PlacementManager : MonoBehaviour
         if (volumeOnSurface != null && volumeOnSurface.holdType == HoldType.Volume && volumeOnSurface != selectedBehavior)
             selectedHold.transform.SetParent(volumeOnSurface.transform, true);
         else
-            selectedHold.transform.SetParent(holdContainer, true);
+            selectedHold.transform.SetParent(null, true);
     }
 
     void ApplyCurrentRotation()
@@ -214,7 +212,7 @@ public class PlacementManager : MonoBehaviour
         Vector3 refUp = Vector3.ProjectOnPlane(Vector3.up, normal).normalized;
         if (refUp.sqrMagnitude < 0.01f) refUp = Vector3.ProjectOnPlane(Vector3.forward, normal).normalized;
         GameObject copy = Instantiate(selectedHold, selectedHold.transform.position + refUp * 0.1f, selectedHold.transform.rotation);
-        copy.transform.localScale = selectedHold.transform.localScale;
+        copy.transform.localScale = selectedHold.transform.lossyScale;
         copy.GetComponent<HoldBehavior>().isLocked = false;
         copy.transform.SetParent(selectedHold.transform.parent, true);
         Select(copy);
