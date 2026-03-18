@@ -89,4 +89,15 @@ public class InventoryManager : MonoBehaviour
     {
         InventoryUI.Instance.Refresh(displayedItems);
     }
+
+    public ItemData FindItemData(string holdId)
+    {
+        foreach (var item in allItems)
+        {
+            if (item?.holdPrefab == null) continue;
+            var b = item.holdPrefab.GetComponent<HoldBehavior>();
+            if (b != null && b.holdId == holdId) return item;
+        }
+        return null;
+    }
 }

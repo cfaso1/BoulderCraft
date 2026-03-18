@@ -14,9 +14,13 @@ public class HoldToolbar : MonoBehaviour
     [SerializeField] Sprite lockSprite;
     [SerializeField] Sprite unlockSprite;
 
+    float _rotateStartAngle;
+
     void Awake()
     {
-        angleDragField.OnDelta += OnAngleDrag;
+        angleDragField.OnDelta      += OnAngleDrag;
+        angleDragField.OnDragStart  += OnRotateDragStart;
+        angleDragField.OnDragEnd    += OnRotateDragEnd;
         duplicateButton.onClick.AddListener(placementManager.DuplicateSelected);
         deleteButton.onClick.AddListener(placementManager.DeleteSelected);
         lockButton.onClick.AddListener(placementManager.ToggleLock);
@@ -24,6 +28,20 @@ public class HoldToolbar : MonoBehaviour
     }
 
     void OnAngleDrag(float delta) { placementManager.AddRotation(delta); }
+
+    void OnRotateDragStart()
+    {
+        _rotateStartAngle = placementManager.CurrentRotationAngle;
+    }
+
+    void OnRotateDragEnd()
+    {
+        float newAngle = placementManager.CurrentRotationAngle;
+        if (Mathf.Abs(newAngle - _rotateStartAngle) < 0.01f) return;
+        HoldBehavior behavior = placementManager.SelectedBehavior;
+        if (behavior == null) return;
+        UndoRedoManager.Instance?.PushToUndo(new RotateHoldCommand(behavior, _rotateStartAngle, newAngle, placementManager));
+    }
 
     public bool IsRotating => angleDragField.IsDragging;
 

@@ -6,6 +6,7 @@ using TMPro;
 public class InventoryUI : MonoBehaviour
 {
     public static InventoryUI Instance;
+    public static bool IsOpen { get; private set; }
     public GameObject inventoryPanel;
     public GameObject slotPrefab;
     public Transform gridParent;
@@ -29,6 +30,7 @@ public class InventoryUI : MonoBehaviour
     public void ToggleInventory()
     {
         bool isOpen = inventoryPanel.activeSelf;
+        IsOpen = !isOpen;
         inventoryPanel.SetActive(!isOpen);
 
         if (!isOpen)

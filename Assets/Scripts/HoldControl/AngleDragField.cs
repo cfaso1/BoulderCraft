@@ -9,6 +9,8 @@ public class AngleDragField : MonoBehaviour, IPointerDownHandler, IDragHandler, 
     public bool IsDragging { get; private set; }
 
     public event System.Action<float> OnDelta;
+    public event System.Action OnDragStart;
+    public event System.Action OnDragEnd;
 
     static readonly Vector2 cursorHotspot = new Vector2(16, 16);
     Vector2 lastPointerPos;
@@ -19,6 +21,7 @@ public class AngleDragField : MonoBehaviour, IPointerDownHandler, IDragHandler, 
         lastPointerPos = e.position;
         Cursor.SetCursor(rotateCursor, cursorHotspot, CursorMode.Auto);
         IsDragging = true;
+        OnDragStart?.Invoke();
     }
 
     public void OnDrag(PointerEventData e)
@@ -32,6 +35,7 @@ public class AngleDragField : MonoBehaviour, IPointerDownHandler, IDragHandler, 
     {
         Cursor.SetCursor(PlayerCam.DefaultCursor, new Vector2(5, 1), CursorMode.Auto);
         IsDragging = false;
+        OnDragEnd?.Invoke();
     }
 
     // Global right-click drag (works anywhere on screen)
@@ -42,6 +46,7 @@ public class AngleDragField : MonoBehaviour, IPointerDownHandler, IDragHandler, 
             IsDragging = true;
             lastPointerPos = Input.mousePosition;
             Cursor.SetCursor(rotateCursor, cursorHotspot, CursorMode.Auto);
+            OnDragStart?.Invoke();
         }
 
         if (Input.GetMouseButton(1))
@@ -55,6 +60,7 @@ public class AngleDragField : MonoBehaviour, IPointerDownHandler, IDragHandler, 
         {
             IsDragging = false;
             Cursor.SetCursor(PlayerCam.DefaultCursor, new Vector2(5, 1), CursorMode.Auto);
+            OnDragEnd?.Invoke();
         }
     }
 }

@@ -27,6 +27,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (SaveLoadUI.IsOpen || InventoryUI.IsOpen)
+        {
+            horizontalInput = 0;
+            verticalInput = 0;
+            rb.linearDamping = drag;
+            SpeedControl();
+            return;
+        }
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
         rb.linearDamping = drag;

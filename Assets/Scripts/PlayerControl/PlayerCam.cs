@@ -33,6 +33,7 @@ public class PlayerCam : MonoBehaviour
 
     private void Update()
     {
+        if (SaveLoadUI.IsOpen || InventoryUI.IsOpen) return;
         if (cameraFree) MoveCamera();
         if (Input.GetKeyDown(KeyCode.E))
             ToggleCursor();
