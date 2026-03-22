@@ -10,7 +10,6 @@ public class UndoRedoManager : MonoBehaviour
 
     void Awake() { Instance = this; }
 
-    // Execute a command and push it to the undo stack.
     public void Do(ICommand cmd)
     {
         cmd.Execute();
@@ -18,8 +17,7 @@ public class UndoRedoManager : MonoBehaviour
         redo.Clear();
     }
 
-    // Push a command that has already been executed (e.g. drag/rotate finalized after the fact).
-    public void PushToUndo(ICommand cmd)
+    public void Record(ICommand cmd)
     {
         undo.Push(cmd);
         redo.Clear();

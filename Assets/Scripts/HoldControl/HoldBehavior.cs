@@ -10,8 +10,8 @@ public class HoldBehavior : MonoBehaviour
     public HoldType holdType;
     public HoldSize holdSize;
     public Color holdColor = Color.white;
-    public float rotationAngle = 0f;
-    public bool isLocked = false;
+    public float rotationAngle;
+    public bool isLocked;
     public Vector3 lastWallNormal = Vector3.forward;
     [SerializeField] Material highlightMaterial;
 
@@ -26,8 +26,17 @@ public class HoldBehavior : MonoBehaviour
             instanceSaveId = System.Guid.NewGuid().ToString();
     }
 
-    public void SetHighlight(bool highlighted)
+    public void SetHighlight(bool on)
     {
-        rend.material = highlighted ? highlightMaterial : originalMaterial;
+        rend.material = on ? highlightMaterial : originalMaterial;
+    }
+
+    public static Quaternion ComputeRotation(float angle, Vector3 normal)
+    {
+        Vector3 refUp = Vector3.ProjectOnPlane(Vector3.up, normal).normalized;
+        if (refUp.sqrMagnitude < 0.01f)
+            refUp = Vector3.ProjectOnPlane(Vector3.forward, normal).normalized;
+        Quaternion baseOrientation = Quaternion.LookRotation(refUp, normal) * Quaternion.Euler(-90f, 0f, 0f);
+        return Quaternion.AngleAxis(angle, normal) * baseOrientation;
     }
 }

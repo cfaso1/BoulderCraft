@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class DuplicateHoldCommand : ICommand
 {
-    readonly GameObject prefab;
-    readonly Vector3 position;
-    readonly Quaternion rotation;
-    readonly Vector3 scale;
-    readonly Transform parent;
+    readonly GameObject source;
+    readonly Vector3 spawnPosition;
+    readonly Quaternion spawnRotation;
+    readonly Vector3 spawnScale;
+    readonly Transform spawnParent;
     readonly float rotationAngle;
     readonly Vector3 wallNormal;
     readonly string instanceSaveId;
@@ -15,38 +15,34 @@ public class DuplicateHoldCommand : ICommand
     GameObject spawned;
     public GameObject SpawnedHold => spawned;
 
-    // Fallback constructor: hold is already instantiated by the caller.
-    public DuplicateHoldCommand(GameObject alreadySpawned, PlacementManager pm)
+    public DuplicateHoldCommand(GameObject sourceHold, HoldBehavior sourceBehavior, Vector3 wallNormal, PlacementManager pm)
     {
-        spawned = alreadySpawned;
-        this.pm = pm;
-    }
+        this.wallNormal  = wallNormal;
+        this.pm          = pm;
+        instanceSaveId   = System.Guid.NewGuid().ToString();
+        rotationAngle    = sourceBehavior.rotationAngle;
+        spawnRotation    = sourceHold.transform.rotation;
+        spawnScale       = sourceHold.transform.lossyScale;
+        spawnParent      = sourceHold.transform.parent;
 
-    public DuplicateHoldCommand(
-        GameObject prefab, Vector3 position, Quaternion rotation, Vector3 scale,
-        Transform parent, float rotationAngle, Vector3 wallNormal, PlacementManager pm)
-    {
-        this.prefab = prefab;
-        this.position = position;
-        this.rotation = rotation;
-        this.scale = scale;
-        this.parent = parent;
-        this.rotationAngle = rotationAngle;
-        this.wallNormal = wallNormal;
-        instanceSaveId = System.Guid.NewGuid().ToString();
-        this.pm = pm;
+        Vector3 refUp = Vector3.ProjectOnPlane(Vector3.up, wallNormal).normalized;
+        if (refUp.sqrMagnitude < 0.01f)
+            refUp = Vector3.ProjectOnPlane(Vector3.forward, wallNormal).normalized;
+        spawnPosition = sourceHold.transform.position + refUp * 0.1f;
+
+        source = InventoryManager.Instance?.FindItemData(sourceBehavior.holdId)?.holdPrefab ?? sourceHold;
     }
 
     public void Execute()
     {
         if (spawned == null)
         {
-            spawned = Object.Instantiate(prefab, position, rotation);
-            spawned.transform.localScale = scale;
-            spawned.transform.SetParent(parent, true);
+            spawned = Object.Instantiate(source, spawnPosition, spawnRotation);
+            spawned.transform.localScale = spawnScale;
+            spawned.transform.SetParent(spawnParent, true);
             var b = spawned.GetComponent<HoldBehavior>();
-            b.isLocked = false;
-            b.rotationAngle = rotationAngle;
+            b.isLocked       = false;
+            b.rotationAngle  = rotationAngle;
             b.lastWallNormal = wallNormal;
             b.instanceSaveId = instanceSaveId;
         }
@@ -58,7 +54,7 @@ public class DuplicateHoldCommand : ICommand
 
     public void Undo()
     {
-        if (pm.SelectedHold == spawned) pm.ForceDeselect();
+        if (pm.SelectedHold == spawned) pm.Deselect();
         spawned.SetActive(false);
     }
 }

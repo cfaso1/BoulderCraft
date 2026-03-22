@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("Movement")]
     public float moveSpeed;
     public float drag;
 
@@ -14,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
 
     float horizontalInput;
     float verticalInput;
+    bool inputBlocked;
 
     Vector3 moveDirection;
 
@@ -27,16 +27,17 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (SaveLoadUI.IsOpen || InventoryUI.IsOpen)
+        inputBlocked = SaveLoadUI.IsOpen || InventoryUI.IsOpen;
+        if (inputBlocked)
         {
             horizontalInput = 0;
             verticalInput = 0;
-            rb.linearDamping = drag;
-            SpeedControl();
-            return;
         }
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        else
+        {
+            horizontalInput = Input.GetAxisRaw("Horizontal");
+            verticalInput = Input.GetAxisRaw("Vertical");
+        }
         rb.linearDamping = drag;
         SpeedControl();
     }
@@ -46,7 +47,8 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
         rb.AddForce(moveDirection * moveSpeed * 10f, ForceMode.Force);
 
-        if (Input.GetKey(upKey))   rb.AddForce(transform.up * flightForce, ForceMode.Force);
+        if (inputBlocked) return;
+        if (Input.GetKey(upKey)) rb.AddForce(transform.up * flightForce, ForceMode.Force);
         if (Input.GetKey(downKey)) rb.AddForce(-transform.up * flightForce, ForceMode.Force);
     }
 

@@ -20,7 +20,7 @@ public class RotateHoldCommand : ICommand
     void Apply(float angle)
     {
         behavior.rotationAngle = angle;
-        behavior.transform.rotation = PlacementManager.ComputeHoldRotation(angle, behavior.lastWallNormal);
+        behavior.transform.rotation = HoldBehavior.ComputeRotation(angle, behavior.lastWallNormal);
         if (pm.SelectedHold == behavior.gameObject) pm.SyncSelectedState();
     }
 }

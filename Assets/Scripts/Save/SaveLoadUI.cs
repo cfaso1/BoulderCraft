@@ -3,19 +3,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// ── Scene setup required ─────────────────────────────────────────────────────
-// 1. Create a new Canvas (or add to HoldToolbarCanvas) with a child Panel named
-//    "SaveLoadPanel" (toggled by this script).
-// 2. Add the following children to the panel:
-//      - TMP_InputField  → filenameInput  (placeholder: "route")
-//      - Button          → saveButton     (label: "Save")
-//      - Button          → loadButton     (label: "Load")
-//      - Button          → newButton      (label: "New")
-//      - Button          → closeButton    (label: "✕")
-// 3. Attach this script to any GameObject and wire the Inspector references.
-// 4. Add a new empty GameObject "SaveLoadManager" and attach SaveManager to it.
-// 5. Add a new empty GameObject "UndoRedoManager" and attach UndoRedoManager to it.
-// ─────────────────────────────────────────────────────────────────────────────
+// Toggles the SaveLoadPanel. Wire filenameInput, save/load/new/close buttons,
+// and attach SaveManager + UndoRedoManager to their own GameObjects.
 
 public class SaveLoadUI : MonoBehaviour
 {

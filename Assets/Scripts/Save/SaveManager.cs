@@ -72,7 +72,7 @@ public class SaveManager : MonoBehaviour
 
         ClearAllHolds();
         UndoRedoManager.Instance?.Clear();
-        PlacementManager.Instance?.ForceDeselect();
+        PlacementManager.Instance?.Deselect();
 
         // Pass 1: instantiate every hold and index by instanceSaveId.
         var spawnedById = new Dictionary<string, GameObject>();
@@ -117,7 +117,7 @@ public class SaveManager : MonoBehaviour
     {
         ClearAllHolds();
         UndoRedoManager.Instance?.Clear();
-        PlacementManager.Instance?.ForceDeselect();
+        PlacementManager.Instance?.Deselect();
         LastSavedPath = null;
     }
 

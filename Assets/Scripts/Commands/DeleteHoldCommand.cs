@@ -3,45 +3,34 @@ using UnityEngine;
 public class DeleteHoldCommand : ICommand
 {
     readonly GameObject hold;
+    readonly HoldBehavior behavior;
     readonly PlacementManager pm;
-    readonly HoldToolbar toolbar;
-    readonly Transform parent;
-    readonly Vector3 position;
-    readonly Quaternion rotation;
-    readonly float rotationAngle;
+    readonly HoldState savedState;
     readonly bool wasLocked;
-    readonly Vector3 wallNormal;
 
-    public DeleteHoldCommand(GameObject hold, PlacementManager pm, HoldToolbar toolbar)
+    public DeleteHoldCommand(GameObject hold, HoldBehavior behavior, PlacementManager pm)
     {
-        this.hold = hold;
-        this.pm = pm;
-        this.toolbar = toolbar;
-        var b = hold.GetComponent<HoldBehavior>();
-        parent = hold.transform.parent;
-        position = hold.transform.position;
-        rotation = hold.transform.rotation;
-        rotationAngle = b.rotationAngle;
-        wasLocked = b.isLocked;
-        wallNormal = b.lastWallNormal;
+        this.hold     = hold;
+        this.behavior = behavior;
+        this.pm       = pm;
+        savedState    = new HoldState(hold.transform, behavior);
+        wasLocked     = behavior.isLocked;
     }
 
     public void Execute()
     {
-        // PM deselects before Do() on first run; this guard handles the redo case.
-        if (pm.SelectedHold == hold) pm.ForceDeselect();
+        if (pm.SelectedHold == hold) pm.Deselect();
         hold.SetActive(false);
     }
 
     public void Undo()
     {
         hold.SetActive(true);
-        hold.transform.SetParent(parent, true);
-        hold.transform.position = position;
-        hold.transform.rotation = rotation;
-        var b = hold.GetComponent<HoldBehavior>();
-        b.rotationAngle = rotationAngle;
-        b.isLocked = wasLocked;
-        b.lastWallNormal = wallNormal;
+        hold.transform.SetParent(savedState.parent, true);
+        hold.transform.position = savedState.position;
+        hold.transform.rotation = savedState.rotation;
+        behavior.rotationAngle  = savedState.rotationAngle;
+        behavior.lastWallNormal = savedState.wallNormal;
+        behavior.isLocked       = wasLocked;
     }
 }

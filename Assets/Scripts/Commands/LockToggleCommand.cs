@@ -14,7 +14,7 @@ public class LockToggleCommand : ICommand
     }
 
     public void Execute() => Apply(!previousState);
-    public void Undo()    => Apply(previousState);
+    public void Undo() => Apply(previousState);
 
     void Apply(bool locked)
     {
