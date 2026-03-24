@@ -3,6 +3,7 @@ using UnityEngine;
 public class DuplicateHoldCommand : ICommand
 {
     readonly GameObject source;
+    readonly Material sourceOriginalMaterial;
     readonly Vector3 spawnPosition;
     readonly Quaternion spawnRotation;
     readonly Vector3 spawnScale;
@@ -31,6 +32,7 @@ public class DuplicateHoldCommand : ICommand
         spawnPosition = sourceHold.transform.position + refUp * 0.1f;
 
         source = InventoryManager.Instance?.FindItemData(sourceBehavior.holdId)?.holdPrefab ?? sourceHold;
+        sourceOriginalMaterial = sourceBehavior.OriginalMaterial;
     }
 
     public void Execute()
@@ -41,6 +43,7 @@ public class DuplicateHoldCommand : ICommand
             spawned.transform.localScale = spawnScale;
             spawned.transform.SetParent(spawnParent, true);
             var b = spawned.GetComponent<HoldBehavior>();
+            b.SetOriginalMaterial(sourceOriginalMaterial);
             b.isLocked       = false;
             b.rotationAngle  = rotationAngle;
             b.lastWallNormal = wallNormal;

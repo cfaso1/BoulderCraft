@@ -18,6 +18,8 @@ public class HoldBehavior : MonoBehaviour
     Renderer rend;
     Material originalMaterial;
 
+    public Material OriginalMaterial => originalMaterial;
+
     void Awake()
     {
         rend = GetComponentInChildren<Renderer>();
@@ -25,6 +27,8 @@ public class HoldBehavior : MonoBehaviour
         if (string.IsNullOrEmpty(instanceSaveId))
             instanceSaveId = System.Guid.NewGuid().ToString();
     }
+
+    public void SetOriginalMaterial(Material mat) { originalMaterial = mat; }
 
     public void SetHighlight(bool on)
     {
