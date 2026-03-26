@@ -1,0 +1,29 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Scripts/Inventory/USS/Inventory.uss?fileID=7433441132597879392&amp;guid=af68da0b36ac3164196454f1e6a17aca&amp;type=3#Inventory"/>
+    <ui:VisualElement name="inventory-root" class="inventory-root">
+        <ui:VisualElement name="title-bar" class="title-bar">
+            <ui:VisualElement class="title-left">
+                <ui:Label text="⛰" class="title-icon"/>
+                <ui:Label text="HOLDS" class="title-text"/>
+            </ui:VisualElement>
+            <ui:Button text="✕" name="close-button" class="close-button"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="filter-bar" class="filter-bar">
+            <ui:Button text="ALL" class="filter-btn filter-active"/>
+            <ui:Button text="Jug" class="filter-btn"/>
+            <ui:Button text="Crimp" class="filter-btn"/>
+            <ui:Button text="Sloper" class="filter-btn"/>
+            <ui:Button text="Pinch" class="filter-btn"/>
+            <ui:Button text="Pocket" class="filter-btn"/>
+            <ui:Button text="Foothold" class="filter-btn"/>
+            <ui:Button text="Volume" class="filter-btn"/>
+        </ui:VisualElement>
+        <ui:ScrollView name="inventory-scroll" class="inventory-scroll">
+            <ui:VisualElement name="inventory-grid" class="inventory-grid"/>
+        </ui:ScrollView>
+        <ui:VisualElement name="tooltip" class="tooltip">
+            <ui:Label name="tooltip-name" text="Hold Name" class="tooltip-name"/>
+            <ui:Label name="tooltip-type" text="Type" class="tooltip-type"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

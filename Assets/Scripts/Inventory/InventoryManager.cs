@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections.Generic; //basic unity features like input and keyCode
 using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
@@ -27,6 +27,7 @@ public class InventoryManager : MonoBehaviour
            RuntimePreviewGenerator.OrthographicMode = true;
            RuntimePreviewGenerator.MarkTextureNonReadable = false;
 
+
         foreach (var item in allItems)
         {
             if (item == null || item.holdPrefab == null) continue;
@@ -43,6 +44,7 @@ public class InventoryManager : MonoBehaviour
                 item.itemName = holdBehavior.holdType + " - " + holdBehavior.holdSize;
                 // Auto set color from hold
                 item.primaryColor = holdBehavior.holdColor;
+                item.colorCategory = holdBehavior.holdType.ToString();
             }
 
             item.icon = null;
@@ -70,7 +72,6 @@ public class InventoryManager : MonoBehaviour
             return h;
         }).ToList();
 
-        RefreshUI();
     }
 
     public void SearchByName(string query)
@@ -85,9 +86,25 @@ public class InventoryManager : MonoBehaviour
         SortByColor();
     }
 
-    void RefreshUI()
+    public void GenerateIconsAndRefresh()
     {
-        InventoryUI.Instance.Refresh(displayedItems);
+        GenerateIcons();
+    }
+
+    public List<ItemData> GetItems()
+    {
+        if (displayedItems.Count == 0)
+            displayedItems = new List<ItemData>(allItems);
+        return displayedItems;
+    }
+
+    public List<ItemData> GetItemsByType(string type)
+    {
+        return allItems.Where(i =>
+        i.holdPrefab != null &&
+        i.holdPrefab.GetComponent<HoldBehavior>() != null &&
+        i.holdPrefab.GetComponent<HoldBehavior>().holdType.ToString().ToUpper() == type.ToUpper()
+    ).ToList();
     }
 
     public ItemData FindItemData(string holdId)

@@ -6,6 +6,6 @@ public class ItemData: ScriptableObject
     public string itemName;
     public Sprite icon;
     public Color primaryColor;
-    public string colorCaregory;
+    public string colorCategory;
     public GameObject holdPrefab;
 }

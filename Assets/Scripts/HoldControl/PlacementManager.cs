@@ -44,7 +44,7 @@ public class PlacementManager : MonoBehaviour
     void Update()
     {
         if (!IsPlacementMode) return;
-        if (SaveLoadUI.IsOpen || InventoryUI.IsOpen) return;
+        if (SaveLoadUI.IsOpen || !InventoryUIToolkit.isHidden) return;
 
         bool ctrl = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl);
         bool shift = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);

@@ -27,7 +27,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        inputBlocked = SaveLoadUI.IsOpen || InventoryUI.IsOpen;
+        inputBlocked = SaveLoadUI.IsOpen || !InventoryUIToolkit.isHidden;
         if (inputBlocked)
         {
             horizontalInput = 0;
