@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dd1aeb10ba55094aaceae467904f2ca, type: 3}
   m_Name: Y-Hold3
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemName: Jug - Large
+  itemName: Jug - Medium
   icon: {fileID: 0}
   primaryColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  colorCaregory: 
-  holdPrefab: {fileID: 187342099858088095, guid: b380f1dac9ca6b0a292e38f9e1085961, type: 3}
+  colorCategory: Jug
+  holdPrefab: {fileID: 1207949656243693751, guid: b380f1dac9ca6b0a292e38f9e1085961, type: 3}

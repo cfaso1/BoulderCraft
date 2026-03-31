@@ -15,5 +15,5 @@ MonoBehaviour:
   itemName: Foothold - Small
   icon: {fileID: 0}
   primaryColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  colorCaregory: 
-  holdPrefab: {fileID: 7808851466275448433, guid: 2462716d1a7342906a67b4f5140dc352, type: 3}
+  colorCategory: Foothold
+  holdPrefab: {fileID: 8316331662310865807, guid: 2462716d1a7342906a67b4f5140dc352, type: 3}

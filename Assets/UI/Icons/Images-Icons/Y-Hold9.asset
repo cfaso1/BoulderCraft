@@ -15,5 +15,5 @@ MonoBehaviour:
   itemName: Crimp - Medium
   icon: {fileID: 0}
   primaryColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  colorCaregory: 
-  holdPrefab: {fileID: 3439475354358492636, guid: 9e5b6e0f415ddfff5a6abc9ea53d5197, type: 3}
+  colorCategory: Crimp
+  holdPrefab: {fileID: 3472828097506325613, guid: 9e5b6e0f415ddfff5a6abc9ea53d5197, type: 3}

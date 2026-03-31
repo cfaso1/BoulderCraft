@@ -15,5 +15,5 @@ MonoBehaviour:
   itemName: 
   icon: {fileID: 0}
   primaryColor: {r: 0, g: 1, b: 1, a: 1}
-  colorCaregory: 
-  holdPrefab: {fileID: 919132149155446097, guid: 5a5ad7d85465fb74c8e843234aeff0bc, type: 3}
+  colorCategory: 
+  holdPrefab: {fileID: 0}

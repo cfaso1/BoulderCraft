@@ -1,28 +1,25 @@
 using UnityEngine;
-
 public class PlayerCam : MonoBehaviour
 {
-
+    public static PlayerCam Instance { get; private set; } // Add this
     public float sensX;
     public float sensY;
-
     public Transform orientation;
     [SerializeField] PlacementManager placementManager;
     [SerializeField] Texture2D defaultCursor;
     [SerializeField] Texture2D hoverCursor;
-
     public static Texture2D DefaultCursor { get; private set; }
     public static Texture2D HoverCursor { get; private set; }
-
     float xRotation;
     float yRotation;
     float xRotationSaved;
     float yRotationSaved;
-    bool cameraFree;
+    public bool cameraFree; // Changed to public
     bool skipNextInput;
 
     private void Start()
     {
+        Instance = this; // Add this
         DefaultCursor = defaultCursor;
         HoverCursor = hoverCursor;
         Cursor.lockState = CursorLockMode.Locked;
@@ -41,14 +38,10 @@ public class PlayerCam : MonoBehaviour
 
     void MoveCamera()
     {
-        // Get mouse inputs
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sensY;
-
-        // If the mouse has moved, move the camera
         if (!(mouseX == 0 && mouseY == 0))
         {
-            // Use original rotation after exiting menu
             if (skipNextInput)
             {
                 xRotation = xRotationSaved;
@@ -61,8 +54,6 @@ public class PlayerCam : MonoBehaviour
                 xRotation -= mouseY;
                 xRotation = Mathf.Clamp(xRotation, -90f, 90f);
             }
-
-            // Move camera
             transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
             orientation.rotation = Quaternion.Euler(0, yRotation, 0);
         }
@@ -88,5 +79,15 @@ public class PlayerCam : MonoBehaviour
             skipNextInput = true;
             PlacementManager.SetPlacementMode(true);
         }
+    }
+
+    public void RestoreCameraControl()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        cameraFree = true;
+        xRotationSaved = xRotation;
+        yRotationSaved = yRotation;
+        skipNextInput = true;
     }
 }

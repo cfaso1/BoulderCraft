@@ -13,9 +13,10 @@ public class InventoryUIToolkit : MonoBehaviour //allows for event functions to 
     private List<Button> filterButtons = new List<Button>(); //stores different types of buttons
     private string activeFilter = "ALL";//tracks filter being used
     public static bool isHidden=true;
-
+    public static InventoryUIToolkit Instance { get; private set; }
     IEnumerator Start()
     {
+        Instance = this;
         Debug.Log("InventoryUIToolkit Start!");
         yield return null;
         root = uiDocument.rootVisualElement.Q("inventory-root");
@@ -57,14 +58,28 @@ public class InventoryUIToolkit : MonoBehaviour //allows for event functions to 
 
     public void ToggleInventory()
     {
-        isHidden = root.style.display == DisplayStyle.None; //is inventory hidden?
-        root.style.display = isHidden ? DisplayStyle.Flex : DisplayStyle.None;//flexbox (CSS) hides if true shows if false
+        if (root == null) return;
 
-        UnityEngine.Cursor.lockState = isHidden ? CursorLockMode.None : CursorLockMode.Locked;
-        UnityEngine.Cursor.visible = isHidden;
+        bool currentlyVisible = root.style.display == DisplayStyle.Flex;
 
-        if (isHidden)
-            Refresh(InventoryManager.Instance.GetItems());//only refreshes grid when inventory is opened
+        if (currentlyVisible)
+        {
+            // CLOSING inventory
+            isHidden = true;
+            root.style.display = DisplayStyle.None;
+            PlayerCam.Instance?.RestoreCameraControl();
+        }
+        else
+        {
+            // OPENING inventory
+            isHidden = false;
+            root.style.display = DisplayStyle.Flex;
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
+            UnityEngine.Cursor.visible = true;
+            if (PlayerCam.Instance != null)
+                PlayerCam.Instance.cameraFree = false;
+            Refresh(InventoryManager.Instance.GetItems());
+        }
     }
 
     void OnFilterClicked(Button clicked, string filter)
@@ -108,6 +123,11 @@ public class InventoryUIToolkit : MonoBehaviour //allows for event functions to 
             var nameLabel = new Label(item.itemName);
             nameLabel.AddToClassList("slot-name");
             slot.Add(nameLabel);
+
+            slot.RegisterCallback<ClickEvent>(e =>
+            {
+                PlacementManager.Instance.BeginSpawnFromInventory(item);
+            });
 
             // Hover effects
             slot.RegisterCallback<MouseOverEvent>(e => {

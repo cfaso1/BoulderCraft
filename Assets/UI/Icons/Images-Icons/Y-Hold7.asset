@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dd1aeb10ba55094aaceae467904f2ca, type: 3}
   m_Name: Y-Hold7
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemName: Pocket - Large
+  itemName: Pinch - Large
   icon: {fileID: 0}
   primaryColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  colorCaregory: 
-  holdPrefab: {fileID: 2037542654288010166, guid: 18a89e8b8c6cb42569e97480998d1ce6, type: 3}
+  colorCategory: Pinch
+  holdPrefab: {fileID: 8466467208171234473, guid: 18a89e8b8c6cb42569e97480998d1ce6, type: 3}

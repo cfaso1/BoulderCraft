@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6dd1aeb10ba55094aaceae467904f2ca, type: 3}
   m_Name: Y-Hold6
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemName: Crimp - Small
+  itemName: Crimp - Medium
   icon: {fileID: 0}
   primaryColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  colorCaregory: 
-  holdPrefab: {fileID: 2644270094617990834, guid: 0efbc05700fa74d50ac6b3d378e0946a, type: 3}
+  colorCategory: Crimp
+  holdPrefab: {fileID: 8317364287614983749, guid: 0efbc05700fa74d50ac6b3d378e0946a, type: 3}

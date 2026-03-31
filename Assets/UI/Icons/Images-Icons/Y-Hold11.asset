@@ -15,5 +15,5 @@ MonoBehaviour:
   itemName: Sloper - Large
   icon: {fileID: 0}
   primaryColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  colorCaregory: 
-  holdPrefab: {fileID: 8118637602971328773, guid: af105517d4bd588a3bf68362d21112b2, type: 3}
+  colorCategory: Sloper
+  holdPrefab: {fileID: 6756197093148498857, guid: af105517d4bd588a3bf68362d21112b2, type: 3}

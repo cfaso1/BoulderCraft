@@ -15,5 +15,5 @@ MonoBehaviour:
   itemName: Jug - Large
   icon: {fileID: 0}
   primaryColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  colorCaregory: 
-  holdPrefab: {fileID: 3844416389321146508, guid: e5d1be9c21671bc1bb0284adfe6d911c, type: 3}
+  colorCategory: Jug
+  holdPrefab: {fileID: 151661449055471288, guid: 0b1c8102291d8989fb4a92205ff1875a, type: 3}

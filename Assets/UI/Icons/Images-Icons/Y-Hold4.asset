@@ -15,5 +15,5 @@ MonoBehaviour:
   itemName: Pinch - Large
   icon: {fileID: 0}
   primaryColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  colorCaregory: 
-  holdPrefab: {fileID: 7610650073012917852, guid: 585d6bedb3380beb8917683e752bfee4, type: 3}
+  colorCategory: Pinch
+  holdPrefab: {fileID: 4128963284686178750, guid: 585d6bedb3380beb8917683e752bfee4, type: 3}

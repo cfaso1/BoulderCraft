@@ -29,6 +29,9 @@ public class PlacementManager : MonoBehaviour
     bool isRotating;
     float rotateStartAngle;
     Vector2 lastRotatePointerPos;
+    GameObject ghostHold;
+    ItemData pendingItem;
+    bool isSpawning;
 
     // Drag-start state captured on mouse-down select, used to build MoveHoldCommand on finalize.
     HoldState dragStartState;
@@ -43,6 +46,22 @@ public class PlacementManager : MonoBehaviour
 
     void Update()
     {
+
+        // Handle ghost spawning from inventory
+        if (isSpawning)
+        {
+            UpdateGhostPosition();
+
+            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+                ConfirmSpawn();
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+                CancelSpawn();
+
+            return; // Skip normal placement logic while spawning
+        }
+
+        if (!IsPlacementMode) return;
         if (!IsPlacementMode) return;
         if (SaveLoadUI.IsOpen || !InventoryUIToolkit.isHidden) return;
 
@@ -287,4 +306,117 @@ public class PlacementManager : MonoBehaviour
         holdRotationAngle = selectedBehavior.rotationAngle;
         lastWallNormal = selectedBehavior.lastWallNormal;
     }
+
+
+
+
+    public void BeginSpawnFromInventory(ItemData item)
+    {
+        SetPlacementMode(true);
+        UnityEngine.Cursor.lockState = CursorLockMode.None;
+        UnityEngine.Cursor.visible = true;
+        // Clean up any existing ghost
+        if (ghostHold != null) Destroy(ghostHold);
+
+        pendingItem = item;
+        isSpawning = true;
+
+        // Create ghost preview
+        ghostHold = Instantiate(item.holdPrefab);
+        ghostHold.name = "GhostHold";
+
+        // Make it transparent
+        SetGhostTransparency(ghostHold, 0.4f);
+
+        // Disable colliders so it doesn't interfere with raycasting
+        foreach (var col in ghostHold.GetComponentsInChildren<Collider>())
+            col.enabled = false;
+
+        // Close inventory
+        InventoryUIToolkit.Instance.ToggleInventory();
+
+        Debug.Log("Spawning: " + item.itemName);
+    }
+
+    void SetGhostTransparency(GameObject obj, float alpha)
+    {
+        foreach (var rend in obj.GetComponentsInChildren<Renderer>())
+        {
+            foreach (var mat in rend.materials)
+            {
+                // Switch to transparent rendering mode
+                mat.SetFloat("_Mode", 3);
+                mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                mat.SetInt("_ZWrite", 0);
+                mat.DisableKeyword("_ALPHATEST_ON");
+                mat.EnableKeyword("_ALPHABLEND_ON");
+                mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+                mat.renderQueue = 3000;
+                Color c = mat.color;
+                mat.color = new Color(c.r, c.g, c.b, alpha);
+            }
+        }
+    }
+
+    void UpdateGhostPosition()
+    {
+        if (ghostHold == null) return;
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (!RaycastSurface(ray, out RaycastHit hit)) return;
+
+        Vector3 normal = hit.normal;
+        Vector3 position = hit.point + normal * surfaceOffset;
+
+        // Snap to bolt grid if enabled
+        if (SnapToGrid && boltGrid != null)
+        {
+            Vector3 nearestBolt = boltGrid.FindNearestBolt(hit.point, normal);
+            position = nearestBolt + normal * surfaceOffset;
+        }
+
+        ghostHold.transform.position = position;
+        ghostHold.transform.rotation = HoldBehavior.ComputeRotation(0f, normal);
+        lastWallNormal = normal;
+    }
+
+    void ConfirmSpawn()
+    {
+        if (ghostHold == null || pendingItem == null) return;
+
+        // Spawn the real hold using existing command system
+        var spawnBehavior = ghostHold.GetComponent<HoldBehavior>();
+        var cmd = new SpawnHoldCommand(
+            pendingItem.holdPrefab,
+            ghostHold.transform.position,
+            ghostHold.transform.rotation,
+            ghostHold.transform.localScale,
+            lastWallNormal,
+            GetHoldContainer()
+        );
+        UndoRedoManager.Instance?.Record(cmd);
+        cmd.Execute();
+
+        CancelSpawn();
+    }
+
+    void CancelSpawn()
+    {
+        if (ghostHold != null) Destroy(ghostHold);
+        ghostHold = null;
+        pendingItem = null;
+        isSpawning = false;
+        FindObjectOfType<PlayerCam>()?.RestoreCameraControl();
+    }
+
+    Transform GetHoldContainer()
+    {
+        // Returns the parent transform where holds are stored
+        // Based on your hierarchy this looks like it's under Showcase
+        GameObject showcase = GameObject.Find("Showcase");
+        return showcase != null ? showcase.transform : null;
+    }
 }
+
+
